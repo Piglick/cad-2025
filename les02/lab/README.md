@@ -1,4 +1,6 @@
 # Отчет о лаботаротоной работе 1. Gradle. Базовое приложение Spring
+Выполнил: Уваров Владислав Александрович, группа 12002453
+
 ## Цель работы
 Создать каркас Java-приложения с использованием Gradle, подключить библиотеку Spring Context и реализовать консольное приложение для чтения данных о товарах из CSV-файла и вывода их в виде таблицы.
 ## Используемые инструменты
@@ -29,24 +31,53 @@ App — основной класс запуска приложения.
 Основной код приложения расположен в директории: app/src/main/java/ru/bsuedu/cad/lab
 
 Структура пакетов:
-
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/App.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/config/AppConfig.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/model/Product.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/reader/Reader.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/reader/ResourceFileReader.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/parser/Parser.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/parser/CSVParser.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/provider/ProductProvider.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/provider/ConcreteProductProvider.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/renderer/Renderer.java
-les02/lab/app/src/main/java/ru/bsuedu/cad/lab/renderer/ConsoleTableRenderer.java
-
+```
+ru.bsuedu.cad.lab
+├── App.java
+├── config
+│   └── AppConfig.java
+├── model
+│   └── Product.java
+├── reader
+│   ├── Reader.java
+│   └── ResourceFileReader.java
+├── parser
+│   ├── Parser.java
+│   └── CSVParser.java
+├── provider
+│   ├── ProductProvider.java
+│   └── ConcreteProductProvider.java
+└── renderer
+    ├── Renderer.java
+    └── ConsoleTableRenderer.java
+```
 Файл с товарами расположен по пути:
 les02/lab/app/src/main/resources/product.csv
 
-Файл настройки зависимостей Gradle:
+### 1. Настройка проекта
+
 les02/lab/app/build.gradle.kts
+- Установлен JDK 17 и Gradle 8.12 согласно инструкциям.
+- В папке `les02/lab` выполнена команда:
+  gradle init --type java-application --package ru.bsuedu.cad.lab --project-name product-table --java-version 17 --dsl kotlin --test-framework junit-jupiter
+- В app/build.gradle.kts добавлена зависимость spring-context:6.2.2 и настройка кодировки компиляции UTF-8.
+
+### 2. Разработка классов
+
+В приложении были созданы классы и интерфейсы согласно диаграмме из задания.
+
+Класс `Product` описывает товар магазина. В нём хранятся данные о товаре: идентификатор, название, описание, категория, цена, количество, ссылка на изображение и даты создания/обновления.
+
+Интерфейс `Reader` и класс `ResourceFileReader` отвечают за чтение CSV-файла `product.csv` из папки `resources`.
+
+Интерфейс `Parser` и класс `CSVParser` отвечают за разбор CSV-файла. `CSVParser` пропускает строку с заголовками и преобразует остальные строки в объекты `Product`.
+
+Интерфейс `ProductProvider` и класс `ConcreteProductProvider` используются для получения списка товаров. `ConcreteProductProvider` объединяет работу `Reader` и `Parser`.
+
+Интерфейс `Renderer` и класс `ConsoleTableRenderer` отвечают за вывод списка товаров в консоль в виде таблицы.
+
+Класс `App` является точкой входа в программу. Он запускает Spring-контейнер, получает из него `Renderer` и вызывает метод `render()`.
+
 ## Выводы
 В ходе выполнения лабораторной работы был создан Gradle-проект Java Application, подключена библиотека Spring Context и реализовано консольное Spring-приложение.
 
