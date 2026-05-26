@@ -1,0 +1,76 @@
+package ru.bsuedu.cad.lab.entity;
+
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "ORDERS")
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id")
+    private Integer orderId;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @Column(name = "order_date")
+    private LocalDateTime orderDate;
+
+    @Column(name = "total_price")
+    private BigDecimal totalPrice;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "shipping_address")
+    private String shippingAddress;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
+
+    public Order() {
+    }
+
+    public Order(Customer customer, LocalDateTime orderDate, BigDecimal totalPrice,
+                 String status, String shippingAddress) {
+        this.customer = customer;
+        this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.shippingAddress = shippingAddress;
+    }
+
+    public void addOrderDetail(OrderDetail orderDetail) {
+        orderDetails.add(orderDetail);
+        orderDetail.setOrder(this);
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+}
