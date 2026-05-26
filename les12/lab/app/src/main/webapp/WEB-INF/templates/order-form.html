@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание заказа</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        form { width: 400px; }
+        label { display: block; margin-top: 15px; }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: #2d6cdf;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        a { display: inline-block; margin-top: 15px; }
+    </style>
+</head>
+<body>
+<h1>Создание заказа</h1>
+
+<form method="post" th:action="@{/orders}">
+    <label>ID покупателя</label>
+    <input type="number" name="customerId" value="1" required>
+
+    <label>Товар</label>
+    <select name="productId">
+        <option th:each="product : ${products}"
+                th:value="${product.productId}"
+                th:text="${product.name + ' — ' + product.price}">
+        </option>
+    </select>
+
+    <label>Количество</label>
+    <input type="number" name="quantity" value="1" min="1" required>
+
+    <button type="submit">Создать заказ</button>
+</form>
+
+<a th:href="@{/orders}">Вернуться к списку заказов</a>
+</body>
+</html>

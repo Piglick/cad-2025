@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #999; padding: 8px; text-align: left; }
+        th { background-color: #eeeeee; }
+        a.button, button {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #2d6cdf;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button.delete { background: #cc3333; }
+        form { display: inline; }
+    </style>
+</head>
+<body>
+<h1>Список заказов</h1>
+
+<a class="button" th:href="@{/orders/new}">Создать заказ</a>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Покупатель</th>
+        <th>Дата</th>
+        <th>Сумма</th>
+        <th>Статус</th>
+        <th>Адрес доставки</th>
+        <th>Действия</th>
+    </tr>
+
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.orderId}"></td>
+        <td th:text="${order.customer.name}"></td>
+        <td th:text="${order.orderDate}"></td>
+        <td th:text="${order.totalPrice}"></td>
+        <td th:text="${order.status}"></td>
+        <td th:text="${order.shippingAddress}"></td>
+        <td>
+            <a class="button" th:href="@{/orders/{id}/edit(id=${order.orderId})}">Изменить</a>
+
+            <form th:action="@{/orders/{id}/delete(id=${order.orderId})}" method="post">
+                <button class="delete" type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
